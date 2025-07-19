@@ -9,7 +9,7 @@ export default function Header() {
           src="/images/main_logo.png"
           alt="특허 검색 시스템"
           width={170}
-          height={70}
+          height={60}
           className={styles.mainLogo}
         />
       </div>
@@ -26,7 +26,7 @@ export default function Header() {
           src="/images/lawfirm_logo.png"
           alt="수호 특허법률사무소 로고"
           width={170}
-          height={70}
+          height={60}
           className={styles.lawfirmLogo}
         />
       </div>

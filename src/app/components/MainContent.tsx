@@ -2,9 +2,8 @@
 import { useState } from "react";
 import Image from "next/image";
 import styles from "./MainContent.module.css";
-import SearchResults from "./SearchResults";
-import AIFeatures from "./AIFeatures";
 import PatentList from "./PatentList";
+import AIFeatures from "./AIFeatures";
 import { dummyPatentData } from "../data/dummyPatentData";
 
 export default function MainContent() {
@@ -48,15 +47,6 @@ export default function MainContent() {
     setSearchResults([]);
   };
 
-  if (isSearching) {
-    return (
-      <SearchResults
-        searchQuery={searchQuery}
-        precision={sliderValue}
-        onBack={handleBack}
-      />
-    );
-  }
 
   return (
     <div className={styles.container}>

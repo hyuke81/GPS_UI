@@ -1,0 +1,321 @@
+.patentListContainer {
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  width: 100%;
+  max-width: 100%;
+}
+
+.listHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 30px;
+  border-bottom: 1px solid #e0e0e0;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.headerLeft {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  flex-shrink: 0;
+}
+
+.listTitle {
+  font-size: 18px;
+  font-weight: 600;
+  color: #333;
+  margin: 0;
+}
+
+.resultCount {
+  font-size: 14px;
+  color: #666;
+  background: linear-gradient(135deg, #e9ecef 0%, #dee2e6 100%);
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-weight: 500;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  white-space: nowrap;
+}
+
+.headerRight {
+  display: flex;
+  gap: 15px;
+  flex-shrink: 0;
+}
+
+.dropdownContainer {
+  position: relative;
+  min-width: 130px;
+  max-width: 150px;
+}
+
+.dropdown {
+  width: 100%;
+  padding: 12px 16px;
+  background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+  border: 2px solid #e9ecef;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #495057;
+  cursor: pointer;
+  outline: none;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23495057' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6,9 12,15 18,9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 14px;
+  padding-right: 40px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  font-family: inherit;
+  line-height: 1.2;
+  box-sizing: border-box;
+}
+
+.dropdown:hover {
+  border-color: #007bff;
+  background: linear-gradient(135deg, #ffffff 0%, #f0f8ff 100%);
+  box-shadow: 0 4px 12px rgba(0, 123, 255, 0.15);
+  transform: translateY(-1px);
+}
+
+.dropdown:focus {
+  border-color: #007bff;
+  background: linear-gradient(135deg, #ffffff 0%, #f0f8ff 100%);
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1), 0 4px 12px rgba(0, 123, 255, 0.15);
+  transform: translateY(-1px);
+}
+
+.dropdown:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(0, 123, 255, 0.1);
+}
+
+.dropdown option {
+  background-color: white;
+  color: #495057;
+  padding: 8px 12px;
+  font-weight: 500;
+  font-size: 14px;
+}
+
+.dropdown option:hover {
+  background-color: #f8f9fa;
+}
+
+.dropdown option:checked {
+  background-color: #e3f2fd;
+  color: #1976d2;
+}
+
+.patentList {
+  max-height: 600px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  width: 100%;
+}
+
+.patentItem {
+  padding: 25px 30px;
+  border-bottom: 1px solid #f0f0f0;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.patentItem:hover {
+  background: linear-gradient(135deg, #f8f9ff 0%, #f0f4ff 100%);
+  transform: translateX(4px);
+  box-shadow: 0 2px 8px rgba(0, 123, 255, 0.1);
+}
+
+.patentItem:last-child {
+  border-bottom: none;
+}
+
+.patentContent {
+  width: 100%;
+  overflow: hidden;
+}
+
+.patentHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 12px;
+  gap: 15px;
+}
+
+.patentTitle {
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+  margin: 0;
+  line-height: 1.4;
+  flex: 1;
+  min-width: 0;
+  word-wrap: break-word;
+}
+
+.patentDescription {
+  font-size: 14px;
+  color: #666;
+  margin: 0 0 15px 0;
+  line-height: 1.5;
+  word-wrap: break-word;
+}
+
+.patentDetails {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+}
+
+.detailRow {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+.detailLabel {
+  font-size: 13px;
+  color: #888;
+  margin-right: 2px;
+  white-space: nowrap;
+}
+
+.detailValue {
+  font-size: 13px;
+  color: #333;
+  font-weight: 500;
+  margin-right: 12px;
+  word-wrap: break-word;
+}
+
+.similarityTag {
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 80px;
+  height: fit-content;
+  flex-shrink: 0;
+  color: white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.similarityTag:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* 유사도별 색상 */
+.similarity95 {
+  background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%);
+}
+
+.similarity90 {
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+}
+
+.similarity80 {
+  background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%);
+}
+
+.similarity70 {
+  background: linear-gradient(135deg, #93c5fd 0%, #60a5fa 100%);
+  color: #1f2937;
+}
+
+.similarity60 {
+  background: linear-gradient(135deg, #bfdbfe 0%, #93c5fd 100%);
+  color: #1f2937;
+}
+
+.similarityLow {
+  background: linear-gradient(135deg, #d1d5db 0%, #9ca3af 100%);
+  color: #374151;
+}
+
+/* 스크롤바 스타일링 */
+.patentList::-webkit-scrollbar {
+  width: 8px;
+}
+
+.patentList::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.patentList::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, #c1c1c1 0%, #a8a8a8 100%);
+  border-radius: 4px;
+}
+
+.patentList::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, #a8a8a8 0%, #8f8f8f 100%);
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+  .listHeader {
+    padding: 15px 20px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+  }
+  
+  .headerRight {
+    width: 100%;
+    justify-content: space-between;
+  }
+  
+  .dropdown {
+    min-width: 120px;
+    max-width: none;
+  }
+  
+  .patentItem {
+    padding: 20px;
+  }
+  
+  .patentHeader {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .patentTitle {
+    margin-right: 0;
+  }
+  
+  .similarityTag {
+    align-self: flex-end;
+  }
+  
+  .detailRow {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+  }
+  
+  .detailValue {
+    margin-right: 0;
+  }
+} 

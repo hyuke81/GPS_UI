@@ -8,7 +8,7 @@ interface PatentListProps {
   totalCount: number;
 }
 
-export default function PatentList({ patents, totalCount }: PatentListProps) {
+export default function PatentList({ patents }: PatentListProps) {
   const [sortOption, setSortOption] = useState("similarity");
   const [filterOption, setFilterOption] = useState("all");
 

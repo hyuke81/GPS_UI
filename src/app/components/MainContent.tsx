@@ -4,14 +4,13 @@ import Image from "next/image";
 import styles from "./MainContent.module.css";
 import PatentList from "./PatentList";
 import AIFeatures from "./AIFeatures";
-import { dummyPatentData } from "../data/dummyPatentData";
+import { dummyPatentData, PatentData } from "../data/dummyPatentData";
 
 export default function MainContent() {
   const [sliderValue, setSliderValue] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
-  const [isSearching, setIsSearching] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [searchResults, setSearchResults] = useState<any[]>([]);
+  const [searchResults, setSearchResults] = useState<PatentData[]>([]);
   const [showResults, setShowResults] = useState(false);
 
   const getSliderBackground = (value: number) => {
@@ -40,13 +39,6 @@ export default function MainContent() {
     setIsLoading(false);
     setSliderValue(1);
   };
-
-  const handleBack = () => {
-    setIsSearching(false);
-    setShowResults(false);
-    setSearchResults([]);
-  };
-
 
   return (
     <div className={styles.container}>

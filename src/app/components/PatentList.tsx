@@ -3,12 +3,21 @@ import { useState, useMemo } from "react";
 import { PatentData } from "../data/dummyPatentData";
 import styles from "./PatentList.module.css";
 
+// 유사도 설정 옵션
+const similarityOptions = [
+  { value: "broad", label: "포괄" },
+  { value: "balanced", label: "균형" },
+  { value: "strict", label: "엄밀" },
+];
+
 interface PatentListProps {
   patents: PatentData[];
   totalCount: number;
 }
 
 export default function PatentList({ patents, totalCount }: PatentListProps) {
+  const [similaritySetting, setSimilaritySetting] = useState("broad");
+  const [similarityFocused, setSimilarityFocused] = useState(false);
   const [sortOption, setSortOption] = useState("none");
   const [filterOption, setFilterOption] = useState("all");
 
@@ -87,6 +96,19 @@ export default function PatentList({ patents, totalCount }: PatentListProps) {
           </span>
         </div>
         <div className={styles.headerRight}>
+          <div className={styles.dropdownContainer}>
+            <select
+              value={similaritySetting}
+              onChange={(e) => setSimilaritySetting(e.target.value)}
+              className={styles.dropdown + ' ' + styles.similarityDropdown}
+            >
+              {similarityOptions.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
+          </div>
           <div className={styles.dropdownContainer}>
             <select
               value={sortOption}

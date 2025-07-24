@@ -7,16 +7,12 @@ import AIFeatures from "./AIFeatures";
 import { dummyPatentData, PatentData } from "../data/dummyPatentData";
 
 export default function MainContent() {
-  const [sliderValue, setSliderValue] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [searchResults, setSearchResults] = useState<PatentData[]>([]);
   const [showResults, setShowResults] = useState(false);
-
-  const getSliderBackground = (value: number) => {
-    const percentage = (value / 2) * 100;
-    return `linear-gradient(to right, #007bff 0%, #007bff ${percentage}%, #e0e0e0 ${percentage}%, #e0e0e0 100%)`;
-  };
+  const [isDomestic, setIsDomestic] = useState(true);
+  const [isForeign, setIsForeign] = useState(false);
 
   const handleSearch = async () => {
     if (searchQuery.trim()) {
@@ -37,7 +33,6 @@ export default function MainContent() {
     setSearchResults([]);
     setShowResults(false);
     setIsLoading(false);
-    setSliderValue(1);
   };
 
   return (
@@ -78,31 +73,24 @@ export default function MainContent() {
             </button>
           </div>
 
-          <div className={styles.precisionControl}>
-            <h3 className={styles.precisionTitle}>검색 정밀도 조절</h3>
-            <div className={styles.sliderContainer}>
+          {/* 국내/해외 체크박스 선택 영역 */}
+          <div className={styles.countryCheckboxes}>
+            <label className={styles.checkboxLabel}>
               <input
-                type="range"
-                min="0"
-                max="2"
-                value={sliderValue}
-                step="1"
-                className={styles.slider}
-                style={{ background: getSliderBackground(sliderValue) }}
-                onChange={(e) => setSliderValue(Number(e.target.value))}
+                type="checkbox"
+                checked={isDomestic}
+                onChange={() => setIsDomestic((prev) => !prev)}
               />
-              <div className={styles.sliderLabels}>
-                <span className={sliderValue === 0 ? styles.activeLabel : ""}>
-                  포괄적 결과
-                </span>
-                <span className={sliderValue === 1 ? styles.activeLabel : ""}>
-                  균형적 결과
-                </span>
-                <span className={sliderValue === 2 ? styles.activeLabel : ""}>
-                  엄밀한 결과
-                </span>
-              </div>
-            </div>
+              국내
+            </label>
+            <label className={styles.checkboxLabel}>
+              <input
+                type="checkbox"
+                checked={isForeign}
+                onChange={() => setIsForeign((prev) => !prev)}
+              />
+              해외
+            </label>
           </div>
 
           {/* 로딩 상태 */}

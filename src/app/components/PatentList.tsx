@@ -9,10 +9,11 @@ interface PatentListProps {
 }
 
 export default function PatentList({ patents, totalCount }: PatentListProps) {
-  const [sortOption, setSortOption] = useState("similarity");
+  const [sortOption, setSortOption] = useState("none");
   const [filterOption, setFilterOption] = useState("all");
 
   const sortOptions = [
+    { value: "none", label: "정렬" },
     { value: "similarity", label: "유사도순" },
     { value: "date_old", label: "오래된순" },
     { value: "date_new", label: "최근순" },
@@ -59,6 +60,7 @@ export default function PatentList({ patents, totalCount }: PatentListProps) {
             new Date(b.applicationDate).getTime() -
             new Date(a.applicationDate).getTime()
         );
+      case "none":
       default:
         return sorted;
     }
@@ -92,7 +94,12 @@ export default function PatentList({ patents, totalCount }: PatentListProps) {
               className={styles.dropdown}
             >
               {sortOptions.map((option) => (
-                <option key={option.value} value={option.value}>
+                <option
+                  key={option.value}
+                  value={option.value}
+                  hidden={option.value === "none"}
+                  disabled={option.value === "none"}
+                >
                   {option.label}
                 </option>
               ))}

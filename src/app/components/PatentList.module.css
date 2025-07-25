@@ -117,6 +117,13 @@
   color: #1976d2;
 }
 
+.dropdown option[value="broad"] {
+  font-size: 16px;
+  font-weight: 700;
+  background-color: #e3f2fd;
+  color: #1976d2;
+}
+
 .dropdown.similaritySelected {
   border: 2px solid #1976d2;
   background: #eaf2fb;
@@ -295,6 +302,16 @@
 }
 
 /* 반응형 디자인 */
+.fullWidth {
+  width: 100%;
+}
+
+.row {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+}
+
 @media (max-width: 768px) {
   .listHeader {
     padding: 15px 20px;
@@ -304,13 +321,20 @@
   }
   
   .headerRight {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .dropdownContainer {
+    min-width: 0; /* 모바일에서 min/max-width 해제 */
+    max-width: none;
+    flex: 1 1 0; /* 한 줄에 여러 개, 최소 120px, 남는 공간 채움 */
     width: 100%;
-    justify-content: space-between;
   }
   
   .dropdown {
-    min-width: 120px;
-    max-width: none;
+    min-width: 0;
+    width: 100%; /* 컨테이너에 맞게 */
   }
   
   .patentItem {

@@ -96,7 +96,7 @@ export default function PatentList({ patents, totalCount }: PatentListProps) {
           </span>
         </div>
         <div className={styles.headerRight}>
-          <div className={styles.dropdownContainer}>
+          <div className={styles.dropdownContainer + ' ' + styles.fullWidth}>
             <select
               value={similaritySetting}
               onChange={(e) => setSimilaritySetting(e.target.value)}
@@ -109,36 +109,38 @@ export default function PatentList({ patents, totalCount }: PatentListProps) {
               ))}
             </select>
           </div>
-          <div className={styles.dropdownContainer}>
-            <select
-              value={sortOption}
-              onChange={(e) => setSortOption(e.target.value)}
-              className={styles.dropdown}
-            >
-              {sortOptions.map((option) => (
-                <option
-                  key={option.value}
-                  value={option.value}
-                  hidden={option.value === "none"}
-                  disabled={option.value === "none"}
-                >
-                  {option.label}
-                </option>
-              ))}
-            </select>
-          </div>
-          <div className={styles.dropdownContainer}>
-            <select
-              value={filterOption}
-              onChange={(e) => setFilterOption(e.target.value)}
-              className={styles.dropdown}
-            >
-              {filterOptions.map((option) => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
-                </option>
-              ))}
-            </select>
+          <div className={styles.row}>
+            <div className={styles.dropdownContainer}>
+              <select
+                value={sortOption}
+                onChange={(e) => setSortOption(e.target.value)}
+                className={styles.dropdown}
+              >
+                {sortOptions.map((option) => (
+                  <option
+                    key={option.value}
+                    value={option.value}
+                    hidden={option.value === "none"}
+                    disabled={option.value === "none"}
+                  >
+                    {option.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className={styles.dropdownContainer}>
+              <select
+                value={filterOption}
+                onChange={(e) => setFilterOption(e.target.value)}
+                className={styles.dropdown}
+              >
+                {filterOptions.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </select>
+            </div>
           </div>
         </div>
       </div>

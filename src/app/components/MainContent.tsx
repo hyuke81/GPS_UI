@@ -4,7 +4,15 @@ import Image from "next/image";
 import styles from "./MainContent.module.css";
 import PatentList from "./PatentList";
 import AIFeatures from "./AIFeatures";
-import { dummyPatentData, PatentData } from "../data/dummyPatentData";
+import Toast from "./Toast";
+import { PatentData } from "../data/dummyPatentData";
+import { searchPatentsByKeyword } from "../data/patentDataService";
+
+interface ToastMessage {
+  id: number;
+  message: string;
+  type: "info" | "warning" | "error" | "success" | "neutral";
+}
 
 export default function MainContent() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -13,18 +21,52 @@ export default function MainContent() {
   const [showResults, setShowResults] = useState(false);
   const [isDomestic, setIsDomestic] = useState(true);
   const [isForeign, setIsForeign] = useState(false);
+  const [toasts, setToasts] = useState<ToastMessage[]>([]);
+  const [toastId, setToastId] = useState(0);
 
-  const handleSearch = async () => {
+  const showToast = (message: string, type: "info" | "warning" | "error" | "success" | "neutral" = "info") => {
+    const id = toastId + 1;
+    setToastId(id);
+    setToasts(prev => [...prev, { id, message, type }]);
+  };
+
+  const removeToast = (id: number) => {
+    setToasts(prev => prev.filter(toast => toast.id !== id));
+  };
+
+  const handleDomesticChange = (checked: boolean) => {
+    setIsDomestic(checked);
+    if (!checked && !isForeign) {
+      setIsDomestic(true);
+    }
+  };
+
+  const handleForeignChange = (checked: boolean) => {
+    // 해외 검색은 비활성: 항상 체크 해제 상태 유지하고 토스트만 표시
+    if (checked) {
+      showToast("해외 검색 서비스는 현재 준비 중입니다.", "neutral");
+    }
+    setIsForeign(false);
+  };
+
+  const handleSearch = () => {
     if (searchQuery.trim()) {
       setIsLoading(true);
       setShowResults(false);
 
-      // 로딩 시뮬레이션 (2초)
       setTimeout(() => {
-        setSearchResults(dummyPatentData);
-        setIsLoading(false);
-        setShowResults(true);
-      }, 2000);
+        try {
+          const results = searchPatentsByKeyword(searchQuery);
+          setSearchResults(results);
+          setShowResults(true);
+        } catch (error) {
+          console.error('Search error:', error);
+          setSearchResults([]);
+          setShowResults(true);
+        } finally {
+          setIsLoading(false);
+        }
+      }, 1000);
     }
   };
 
@@ -37,7 +79,15 @@ export default function MainContent() {
 
   return (
     <div className={styles.container}>
-      {/* 상단 검색 섹션 */}
+      {toasts.map((toast) => (
+        <Toast
+          key={toast.id}
+          message={toast.message}
+          type={toast.type}
+          onClose={() => removeToast(toast.id)}
+        />
+      ))}
+
       <section className={styles.searchSection}>
         <div className={styles.searchContainer}>
           <div className={styles.searchHeader}>
@@ -58,7 +108,7 @@ export default function MainContent() {
           <div className={styles.searchInputContainer}>
             <input
               type="text"
-              placeholder="예시: 태양광 패널"
+              placeholder="예시: 태양광, 풍력, 친환경"
               className={styles.searchInput}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
@@ -73,13 +123,12 @@ export default function MainContent() {
             </button>
           </div>
 
-          {/* 국내/해외 체크박스 선택 영역 */}
           <div className={styles.countryCheckboxes}>
             <label className={styles.checkboxLabel}>
               <input
                 type="checkbox"
                 checked={isDomestic}
-                onChange={() => setIsDomestic((prev) => !prev)}
+                onChange={(e) => handleDomesticChange(e.target.checked)}
               />
               국내
             </label>
@@ -87,13 +136,12 @@ export default function MainContent() {
               <input
                 type="checkbox"
                 checked={isForeign}
-                onChange={() => setIsForeign((prev) => !prev)}
+                onChange={(e) => handleForeignChange(e.target.checked)}
               />
               해외
             </label>
           </div>
 
-          {/* 로딩 상태 */}
           {isLoading && (
             <div className={styles.loadingContainer}>
               <div className={styles.spinner}></div>
@@ -103,8 +151,7 @@ export default function MainContent() {
         </div>
       </section>
 
-      {/* 하단 섹션: 검색 결과 또는 AI 기능 소개 */}
-      {showResults && searchResults.length > 0 ? (
+      {showResults ? (
         <section className={styles.resultsSection}>
           <div className={styles.resultsContainer}>
             <div className={styles.resultsHeader}>
@@ -113,10 +160,17 @@ export default function MainContent() {
                 초기화
               </button>
             </div>
-            <PatentList
-              patents={searchResults}
-              totalCount={searchResults.length}
-            />
+            {searchResults.length > 0 ? (
+              <PatentList
+                patents={searchResults}
+                totalCount={searchResults.length}
+              />
+            ) : (
+              <div className={styles.noResults}>
+                <p>검색 결과가 없습니다. 다른 키워드로 검색해보세요.</p>
+                <p>예시: 태양광, 풍력, 친환경</p>
+              </div>
+            )}
           </div>
         </section>
       ) : (

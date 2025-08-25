@@ -1,0 +1,85 @@
+.toast {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translate(-50%, -120%);
+  z-index: 1000;
+  max-width: 540px;
+  width: calc(100% - 40px);
+  transition: transform 0.3s ease-in-out;
+  border-radius: 10px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+  overflow: hidden;
+}
+
+.toast.show {
+  transform: translate(-50%, 0);
+}
+
+.toast.hide {
+  transform: translate(-50%, -120%);
+}
+
+.toastContent {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 18px;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.message {
+  flex: 1;
+  margin-right: 12px;
+}
+
+.closeButton {
+  background: none;
+  border: none;
+  color: inherit;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  padding: 0;
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: background-color 0.2s;
+  flex-shrink: 0;
+}
+
+.closeButton:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* 토스트 타입별 스타일 */
+.info { background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); }
+.warning { background: linear-gradient(135deg, #9ca3af 0%, #6b7280 100%); }
+.error { background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); }
+.success { background: linear-gradient(135deg, #10b981 0%, #059669 100%); }
+.neutral { background: linear-gradient(135deg, #9ca3af 0%, #6b7280 100%); }
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+  .toast {
+    top: 10px;
+    width: calc(100% - 20px);
+  }
+  
+  .toastContent {
+    padding: 12px 14px;
+    font-size: 13px;
+  }
+  
+  .closeButton {
+    font-size: 16px;
+    width: 20px;
+    height: 20px;
+  }
+} 

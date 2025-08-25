@@ -23,6 +23,7 @@
   align-items: center;
   gap: 15px;
   flex-shrink: 0;
+  min-width: 0;
 }
 
 .listTitle {
@@ -30,6 +31,7 @@
   font-weight: 600;
   color: #333;
   margin: 0;
+  white-space: nowrap;
 }
 
 .resultCount {
@@ -41,18 +43,25 @@
   font-weight: 500;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
   white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .headerRight {
   display: flex;
-  gap: 15px;
+  gap: 12px;
   flex-shrink: 0;
+  min-width: 0;
+  flex-wrap: wrap;
+  align-items: center;
+  flex: 1;
+  justify-content: flex-end;
 }
 
 .dropdownContainer {
   position: relative;
-  min-width: 90px;
-  max-width: 110px;
+  min-width: 92px;
+  max-width: 120px;
+  flex: 1 0 auto;
 }
 
 .dropdown {
@@ -79,6 +88,9 @@
   font-family: inherit;
   line-height: 1.2;
   box-sizing: border-box;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
 }
 
 .dropdown:hover {
@@ -192,6 +204,7 @@
   flex: 1;
   min-width: 0;
   word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 .patentDescription {
@@ -200,6 +213,7 @@
   margin: 0 0 15px 0;
   line-height: 1.5;
   word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 .patentDetails {
@@ -222,6 +236,7 @@
   color: #888;
   margin-right: 2px;
   white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .detailValue {
@@ -230,6 +245,8 @@
   font-weight: 500;
   margin-right: 12px;
   word-wrap: break-word;
+  overflow-wrap: break-word;
+  max-width: 200px;
 }
 
 .similarityTag {
@@ -310,31 +327,85 @@
   display: flex;
   gap: 10px;
   width: 100%;
+  flex-wrap: wrap;
+}
+
+/* PC 버전에서 드롭다운들을 한 줄에 배치 */
+@media (min-width: 769px) {
+  .headerRight {
+    flex-direction: row;
+    align-items: center;
+  }
+  
+  .row {
+    flex-direction: row;
+    flex-wrap: nowrap;
+  }
+  
+  .dropdownContainer {
+    min-width: 80px;
+    max-width: 120px;
+    flex: 0 0 auto;
+  }
+  
+  .dropdownContainer.fullWidth {
+    flex: 0 0 auto;
+    max-width: 120px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .listHeader {
+    padding: 20px 25px;
+  }
+  
+  .headerRight {
+    gap: 12px;
+  }
+  
+  .dropdownContainer {
+    min-width: 80px;
+    max-width: 130px;
+  }
+  
+  .detailValue {
+    max-width: 150px;
+  }
 }
 
 @media (max-width: 768px) {
   .listHeader {
     padding: 15px 20px;
     flex-direction: column;
-    align-items: flex-start;
+    align-items: stretch;
     gap: 15px;
+  }
+  
+  .headerLeft {
+    justify-content: space-between;
+    width: 100%;
   }
   
   .headerRight {
     flex-direction: column;
     gap: 10px;
+    width: 100%;
   }
   
   .dropdownContainer {
-    min-width: 0; /* 모바일에서 min/max-width 해제 */
+    min-width: 0;
     max-width: none;
-    flex: 1 1 0; /* 한 줄에 여러 개, 최소 120px, 남는 공간 채움 */
     width: 100%;
   }
   
   .dropdown {
-    min-width: 0;
-    width: 100%; /* 컨테이너에 맞게 */
+    width: 100%;
+    text-align: left;
+  }
+  
+  .row {
+    flex-direction: column;
+    gap: 8px;
   }
   
   .patentItem {
@@ -344,6 +415,7 @@
   .patentHeader {
     flex-direction: column;
     gap: 10px;
+    align-items: stretch;
   }
   
   .patentTitle {
@@ -351,16 +423,75 @@
   }
   
   .similarityTag {
-    align-self: flex-end;
+    align-self: flex-start;
+    width: fit-content;
   }
   
   .detailRow {
     flex-direction: column;
     align-items: flex-start;
-    gap: 2px;
+    gap: 4px;
   }
   
   .detailValue {
     margin-right: 0;
+    max-width: none;
+    width: 100%;
   }
+  
+  .detailLabel {
+    margin-right: 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .listHeader {
+    padding: 12px 15px;
+  }
+  
+  .headerLeft {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  
+  .listTitle {
+    font-size: 16px;
+  }
+  
+  .resultCount {
+    font-size: 12px;
+    padding: 4px 8px;
+  }
+  
+  .patentItem {
+    padding: 15px;
+  }
+  
+  .patentTitle {
+    font-size: 14px;
+  }
+  
+  .patentDescription {
+    font-size: 13px;
+  }
+  
+  .similarityTag {
+    padding: 6px 12px;
+    font-size: 11px;
+    min-width: 70px;
+  }
+  
+  .detailLabel,
+  .detailValue {
+    font-size: 12px;
+  }
+} 
+
+/* PC: keep three dropdowns in a single row */
+@media (min-width: 1024px) {
+  .headerRight { flex-wrap: nowrap; }
+  .row { flex-wrap: nowrap; }
+  .dropdownContainer { flex: 0 0 110px; max-width: 110px; }
+  .dropdownContainer.fullWidth { flex: 0 0 120px; max-width: 120px; }
 } 

@@ -96,11 +96,11 @@ export default function PatentList({ patents, totalCount }: PatentListProps) {
           </span>
         </div>
         <div className={styles.headerRight}>
-          <div className={styles.dropdownContainer + ' ' + styles.fullWidth}>
+          <div className={styles.dropdownContainer + " " + styles.fullWidth}>
             <select
               value={similaritySetting}
               onChange={(e) => setSimilaritySetting(e.target.value)}
-              className={styles.dropdown + ' ' + styles.similarityDropdown}
+              className={styles.dropdown + " " + styles.similarityDropdown}
             >
               {similarityOptions.map((option) => (
                 <option key={option.value} value={option.value}>

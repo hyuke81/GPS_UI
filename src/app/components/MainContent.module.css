@@ -254,6 +254,67 @@
   background: #eaf2fb;
 }
 
+/* 유사단어 표시 스타일 */
+.similarWordsContainer {
+  margin: 20px 0;
+  padding: 16px 20px;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  border-radius: 12px;
+  border: 1px solid #dee2e6;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.similarWordsHeader {
+  margin-bottom: 12px;
+}
+
+.similarWordsLabel {
+  font-size: 14px;
+  font-weight: 600;
+  color: #495057;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.similarWordsLabel::before {
+  content: "💡";
+  font-size: 16px;
+}
+
+.similarWordsList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.similarWordTag {
+  display: inline-block;
+  padding: 6px 12px;
+  background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+  color: #1976d2;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 2px 4px rgba(25, 118, 210, 0.15);
+  user-select: none;
+  border: 1px solid #90caf9;
+}
+
+.similarWordTag:hover {
+  background: linear-gradient(135deg, #bbdefb 0%, #90caf9 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(25, 118, 210, 0.25);
+  color: #1565c0;
+}
+
+.similarWordTag:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(25, 118, 210, 0.15);
+}
+
 /* 반응형 디자인 */
 @media (max-width: 768px) {
   .searchContainer {
@@ -272,5 +333,19 @@
     flex-direction: column;
     gap: 15px;
     align-items: flex-start;
+  }
+
+  .similarWordsContainer {
+    margin: 16px 0;
+    padding: 12px 16px;
+  }
+  
+  .similarWordsList {
+    gap: 6px;
+  }
+  
+  .similarWordTag {
+    padding: 5px 10px;
+    font-size: 12px;
   }
 } 

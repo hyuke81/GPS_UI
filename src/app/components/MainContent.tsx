@@ -1,11 +1,11 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import styles from "./MainContent.module.css";
 import PatentList from "./PatentList";
 import AIFeatures from "./AIFeatures";
 import Toast from "./Toast";
-import { PatentData } from "../data/dummyPatentData";
+import { PatentData, getSimilarWordsByKeyword } from "../data/dummyPatentData";
 import { searchPatentsByKeyword } from "../data/patentDataService";
 
 interface ToastMessage {
@@ -23,6 +23,8 @@ export default function MainContent() {
   const [isForeign, setIsForeign] = useState(false);
   const [toasts, setToasts] = useState<ToastMessage[]>([]);
   const [toastId, setToastId] = useState(0);
+  const [similarWords, setSimilarWords] = useState<string[]>([]);
+  const [showSimilarWords, setShowSimilarWords] = useState(false);
 
   const showToast = (message: string, type: "info" | "warning" | "error" | "success" | "neutral" = "info") => {
     const id = toastId + 1;
@@ -33,6 +35,30 @@ export default function MainContent() {
   const removeToast = (id: number) => {
     setToasts(prev => prev.filter(toast => toast.id !== id));
   };
+
+  // 검색어가 변경될 때 유사단어를 가져오는 함수
+  useEffect(() => {
+    const loadSimilarWords = async () => {
+      if (searchQuery.trim()) {
+        try {
+          const words = await getSimilarWordsByKeyword(searchQuery);
+          setSimilarWords(words);
+          setShowSimilarWords(words.length > 0);
+        } catch (error) {
+          console.error('Error loading similar words:', error);
+          setSimilarWords([]);
+          setShowSimilarWords(false);
+        }
+      } else {
+        setSimilarWords([]);
+        setShowSimilarWords(false);
+      }
+    };
+
+    // 디바운싱: 500ms 후에 실행
+    const timeoutId = setTimeout(loadSimilarWords, 500);
+    return () => clearTimeout(timeoutId);
+  }, [searchQuery]);
 
   const handleDomesticChange = (checked: boolean) => {
     setIsDomestic(checked);
@@ -74,6 +100,17 @@ export default function MainContent() {
     setSearchResults([]);
     setShowResults(false);
     setIsLoading(false);
+    setSimilarWords([]);
+    setShowSimilarWords(false);
+  };
+
+  // 유사단어 클릭 핸들러
+  const handleSimilarWordClick = (word: string) => {
+    setSearchQuery(word);
+    // 클릭한 단어로 즉시 검색 실행
+    setTimeout(() => {
+      handleSearch();
+    }, 100);
   };
 
   return (
@@ -121,6 +158,26 @@ export default function MainContent() {
               {isLoading ? "검색 중..." : "검색"}
             </button>
           </div>
+
+          {/* 유사단어 표시 영역 */}
+          {showSimilarWords && similarWords.length > 0 && (
+            <div className={styles.similarWordsContainer}>
+              <div className={styles.similarWordsHeader}>
+                <span className={styles.similarWordsLabel}>유사 키워드</span>
+              </div>
+              <div className={styles.similarWordsList}>
+                {similarWords.map((word, index) => (
+                  <span 
+                    key={index} 
+                    className={styles.similarWordTag}
+                    onClick={() => handleSimilarWordClick(word)}
+                  >
+                    {word}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
 
           <div className={styles.countryCheckboxes}>
             <label className={styles.checkboxLabel}>

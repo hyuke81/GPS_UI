@@ -49,24 +49,23 @@ export default function MainContent() {
     setIsForeign(false);
   };
 
-  const handleSearch = () => {
+  const handleSearch = async () => {
     if (searchQuery.trim()) {
       setIsLoading(true);
       setShowResults(false);
 
-      setTimeout(() => {
-        try {
-          const results = searchPatentsByKeyword(searchQuery);
-          setSearchResults(results);
-          setShowResults(true);
-        } catch (error) {
-          console.error('Search error:', error);
-          setSearchResults([]);
-          setShowResults(true);
-        } finally {
-          setIsLoading(false);
-        }
-      }, 1000);
+      try {
+        const results = await searchPatentsByKeyword(searchQuery);
+        setSearchResults(results);
+        setShowResults(true);
+      } catch (error) {
+        console.error('Search error:', error);
+        setSearchResults([]);
+        setShowResults(true);
+        showToast("검색 중 오류가 발생했습니다.", "error");
+      } finally {
+        setIsLoading(false);
+      }
     }
   };
 
@@ -108,7 +107,7 @@ export default function MainContent() {
           <div className={styles.searchInputContainer}>
             <input
               type="text"
-              placeholder="예시: 태양광, 풍력, 친환경"
+              placeholder="예시: 4륜, 기계식키보드, 물류로봇, 인공지능, 태양광발전"
               className={styles.searchInput}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
@@ -168,7 +167,7 @@ export default function MainContent() {
             ) : (
               <div className={styles.noResults}>
                 <p>검색 결과가 없습니다. 다른 키워드로 검색해보세요.</p>
-                <p>예시: 태양광, 풍력, 친환경</p>
+                <p>예시: 4륜, 기계식키보드, 물류로봇, 인공지능, 태양광발전</p>
               </div>
             )}
           </div>

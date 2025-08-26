@@ -173,6 +173,8 @@ export default function PatentList({ patents, totalCount }: PatentListProps) {
                   <span className={styles.detailValue}>
                     {patent.patentNumber}
                   </span>
+                </div>
+                <div className={styles.detailRow}>
                   <span className={styles.detailLabel}>특허권자:</span>
                   <span className={styles.detailValue}>
                     {patent.patentHolder}

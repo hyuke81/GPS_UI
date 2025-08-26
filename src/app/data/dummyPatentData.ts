@@ -11,6 +11,12 @@ export interface PatentData {
   imageUrl?: string;
 }
 
+// 유사단어 데이터 구조
+export interface SimilarWordData {
+  기준단어: string;
+  유사단어: string;
+}
+
 // 키워드 매핑 정의
 export const KEYWORD_MAPPING = {
   // 4륜, 전륜, 자동차
@@ -49,6 +55,42 @@ export const getFolderPathByKeyword = (keyword: string): string | null => {
   }
 
   return null;
+};
+
+// 유사단어 데이터를 로드하는 함수
+export const loadSimilarWords = async (folderPath: string): Promise<SimilarWordData[]> => {
+  try {
+    const module = await import(`./${folderPath}/similar_words.json`);
+    return module.default || [];
+  } catch (error) {
+    console.error(`Error loading similar words from ${folderPath}:`, error);
+    return [];
+  }
+};
+
+// 키워드에 해당하는 유사단어들을 가져오는 함수
+export const getSimilarWordsByKeyword = async (keyword: string): Promise<string[]> => {
+  try {
+    const folderPath = getFolderPathByKeyword(keyword);
+    
+    if (!folderPath) {
+      return [];
+    }
+
+    const similarWordsData = await loadSimilarWords(folderPath);
+    
+    // 입력된 키워드와 일치하는 기준단어의 유사단어들을 찾기
+    const matchingSimilarWords = similarWordsData
+      .filter(item => item.기준단어.toLowerCase().includes(keyword.toLowerCase()))
+      .map(item => item.유사단어)
+      .filter((word, index, arr) => arr.indexOf(word) === index) // 중복 제거
+      .filter(word => word.toLowerCase() !== keyword.toLowerCase()); // 기준단어와 동일한 단어 제거
+
+    return matchingSimilarWords;
+  } catch (error) {
+    console.error('Error getting similar words:', error);
+    return [];
+  }
 };
 
 // JSON 데이터를 PatentData로 변환하는 함수

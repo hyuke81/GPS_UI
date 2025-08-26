@@ -1,10 +1,10 @@
-import { PatentData, getFolderPathByKeyword, convertJsonToPatentData } from './dummyPatentData';
+import { PatentData, getFolderPathByKeyword, convertJsonToPatentData, JsonPatentData } from './dummyPatentData';
 
 // 동적으로 JSON 파일을 로드하는 함수
-const loadJsonData = async (folderPath: string): Promise<any[]> => {
+const loadJsonData = async (folderPath: string): Promise<JsonPatentData[]> => {
   try {
-    const module = await import(`./${folderPath}/final_domestic_merged.json`);
-    return module.default || [];
+    const jsonModule = await import(`./${folderPath}/final_domestic_merged.json`);
+    return jsonModule.default || [];
   } catch (error) {
     console.error(`Error loading data from ${folderPath}:`, error);
     return [];
@@ -30,7 +30,7 @@ export const searchPatentsByKeyword = async (keyword: string): Promise<PatentDat
     }
 
     // 키워드로 데이터 필터링 (선택사항 - 모든 데이터를 반환할 수도 있음)
-    const filteredData = jsonData.filter((item: any) => {
+    const filteredData = jsonData.filter((item: JsonPatentData) => {
       const searchText = `${item.발명명칭_ko || ''} ${item.발명명칭 || ''} ${item.기준단어 || ''}`.toLowerCase();
       return searchText.includes(keyword.toLowerCase());
     });

@@ -219,7 +219,6 @@ export default function MainContent() {
             {searchResults.length > 0 ? (
               <PatentList
                 patents={searchResults}
-                totalCount={searchResults.length}
               />
             ) : (
               <div className={styles.noResults}>

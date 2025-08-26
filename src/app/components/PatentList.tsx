@@ -12,12 +12,11 @@ const similarityOptions = [
 
 interface PatentListProps {
   patents: PatentData[];
-  totalCount: number;
+  totalCount?: number;
 }
 
-export default function PatentList({ patents, totalCount }: PatentListProps) {
+export default function PatentList({ patents }: PatentListProps) {
   const [similaritySetting, setSimilaritySetting] = useState("broad");
-  const [similarityFocused, setSimilarityFocused] = useState(false);
   const [sortOption, setSortOption] = useState("none");
   const [filterOption, setFilterOption] = useState("all");
 

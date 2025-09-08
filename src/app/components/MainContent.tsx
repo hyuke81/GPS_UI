@@ -77,6 +77,16 @@ export default function MainContent() {
       if (Array.isArray(rs)) setRecentSearches(rs);
       if (Array.isArray(rv)) setRecentViewedPatents(rv);
     } catch {}
+
+    // 헤더 로고 클릭 -> 초기화 이벤트 처리
+    const onHeaderReset = () => handleReset();
+    window.addEventListener("gps:reset-search", onHeaderReset as EventListener);
+    return () => {
+      window.removeEventListener(
+        "gps:reset-search",
+        onHeaderReset as EventListener
+      );
+    };
   }, []);
 
   const handleDomesticChange = (checked: boolean) => {

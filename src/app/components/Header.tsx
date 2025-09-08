@@ -1,3 +1,4 @@
+"use client";
 import Image from "next/image";
 import styles from "./Header.module.css";
 
@@ -5,13 +6,24 @@ export default function Header() {
   return (
     <header className={styles.header}>
       <div className={styles.leftSection}>
-        <Image
-          src="/images/main_logo.png"
-          alt="특허 검색 시스템"
-          width={170}
-          height={60}
-          className={styles.mainLogo}
-        />
+        <a
+          href="#"
+          aria-label="검색 초기 상태로 초기화"
+          onClick={(e) => {
+            e.preventDefault();
+            if (typeof window !== "undefined") {
+              window.dispatchEvent(new CustomEvent("gps:reset-search"));
+            }
+          }}
+        >
+          <Image
+            src="/images/main_logo.png"
+            alt="특허 검색 시스템"
+            width={170}
+            height={60}
+            className={styles.mainLogo}
+          />
+        </a>
       </div>
       
       <div className={styles.rightSection}>

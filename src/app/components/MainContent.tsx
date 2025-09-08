@@ -25,15 +25,22 @@ export default function MainContent() {
   const [toastId, setToastId] = useState(0);
   const [similarWords, setSimilarWords] = useState<string[]>([]);
   const [showSimilarWords, setShowSimilarWords] = useState(false);
+  const [recentSearches, setRecentSearches] = useState<string[]>([]);
+  const [recentViewedPatents, setRecentViewedPatents] = useState<PatentData[]>(
+    []
+  );
 
-  const showToast = (message: string, type: "info" | "warning" | "error" | "success" | "neutral" = "info") => {
+  const showToast = (
+    message: string,
+    type: "info" | "warning" | "error" | "success" | "neutral" = "info"
+  ) => {
     const id = toastId + 1;
     setToastId(id);
-    setToasts(prev => [...prev, { id, message, type }]);
+    setToasts((prev) => [...prev, { id, message, type }]);
   };
 
   const removeToast = (id: number) => {
-    setToasts(prev => prev.filter(toast => toast.id !== id));
+    setToasts((prev) => prev.filter((toast) => toast.id !== id));
   };
 
   // 검색어가 변경될 때 유사단어를 가져오는 함수
@@ -45,7 +52,7 @@ export default function MainContent() {
           setSimilarWords(words);
           setShowSimilarWords(words.length > 0);
         } catch (error) {
-          console.error('Error loading similar words:', error);
+          console.error("Error loading similar words:", error);
           setSimilarWords([]);
           setShowSimilarWords(false);
         }
@@ -59,6 +66,18 @@ export default function MainContent() {
     const timeoutId = setTimeout(loadSimilarWords, 500);
     return () => clearTimeout(timeoutId);
   }, [searchQuery]);
+
+  // 초기 localStorage 로드
+  useEffect(() => {
+    try {
+      const rs = JSON.parse(localStorage.getItem("recentSearches") || "[]");
+      const rv = JSON.parse(
+        localStorage.getItem("recentViewedPatents") || "[]"
+      );
+      if (Array.isArray(rs)) setRecentSearches(rs);
+      if (Array.isArray(rv)) setRecentViewedPatents(rv);
+    } catch {}
+  }, []);
 
   const handleDomesticChange = (checked: boolean) => {
     setIsDomestic(checked);
@@ -84,8 +103,15 @@ export default function MainContent() {
         const results = await searchPatentsByKeyword(searchQuery);
         setSearchResults(results);
         setShowResults(true);
+        // 최근 검색어 저장
+        const next = [
+          searchQuery.trim(),
+          ...recentSearches.filter((q) => q !== searchQuery.trim()),
+        ].slice(0, 10);
+        setRecentSearches(next);
+        localStorage.setItem("recentSearches", JSON.stringify(next));
       } catch (error) {
-        console.error('Search error:', error);
+        console.error("Search error:", error);
         setSearchResults([]);
         setShowResults(true);
         showToast("검색 중 오류가 발생했습니다.", "error");
@@ -93,6 +119,13 @@ export default function MainContent() {
         setIsLoading(false);
       }
     }
+  };
+
+  const handlePatentClick = (patent: PatentData) => {
+    const withoutDup = recentViewedPatents.filter((p) => p.id !== patent.id);
+    const next = [patent, ...withoutDup].slice(0, 8);
+    setRecentViewedPatents(next);
+    localStorage.setItem("recentViewedPatents", JSON.stringify(next));
   };
 
   const handleReset = () => {
@@ -127,84 +160,84 @@ export default function MainContent() {
       {!showResults && (
         <section className={styles.searchSection}>
           <div className={styles.searchContainer}>
-          <div className={styles.searchHeader}>
-            <Image
-              src="/images/mainsearch_icon.png"
-              alt="검색 아이콘"
-              width={24}
-              height={24}
-              className={styles.searchIcon}
-            />
-            <h1 className={styles.searchTitle}>특허 주제 검색</h1>
-          </div>
-
-          <div className={styles.searchPrompt}>
-            어떤 특허 주제를 찾고 있나요?
-          </div>
-
-          <div className={styles.searchInputContainer}>
-            <input
-              type="text"
-              placeholder="예시: 4륜, 기계식키보드, 물류로봇, 인공지능, 태양광발전"
-              className={styles.searchInput}
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              onKeyPress={(e) => e.key === "Enter" && handleSearch()}
-            />
-            <button
-              className={styles.searchButton}
-              onClick={handleSearch}
-              disabled={!searchQuery.trim() || isLoading}
-            >
-              {isLoading ? "검색 중..." : "검색"}
-            </button>
-          </div>
-
-          {/* 유사단어 표시 영역 */}
-          {showSimilarWords && similarWords.length > 0 && (
-            <div className={styles.similarWordsContainer}>
-              <div className={styles.similarWordsHeader}>
-                <span className={styles.similarWordsLabel}>유사 키워드</span>
-              </div>
-              <div className={styles.similarWordsList}>
-                {similarWords.map((word, index) => (
-                  <span 
-                    key={index} 
-                    className={styles.similarWordTag}
-                    onClick={() => handleSimilarWordClick(word)}
-                  >
-                    {word}
-                  </span>
-                ))}
-              </div>
-            </div>
-          )}
-
-          <div className={styles.countryCheckboxes}>
-            <label className={styles.checkboxLabel}>
-              <input
-                type="checkbox"
-                checked={isDomestic}
-                onChange={(e) => handleDomesticChange(e.target.checked)}
+            <div className={styles.searchHeader}>
+              <Image
+                src="/images/mainsearch_icon.png"
+                alt="검색 아이콘"
+                width={24}
+                height={24}
+                className={styles.searchIcon}
               />
-              국내
-            </label>
-            <label className={styles.checkboxLabel}>
-              <input
-                type="checkbox"
-                checked={isForeign}
-                onChange={(e) => handleForeignChange(e.target.checked)}
-              />
-              해외
-            </label>
-          </div>
-
-          {isLoading && (
-            <div className={styles.loadingContainer}>
-              <div className={styles.spinner}></div>
-              <p>AI가 특허를 분석하고 있습니다...</p>
+              <h1 className={styles.searchTitle}>특허 주제 검색</h1>
             </div>
-          )}
+
+            <div className={styles.searchPrompt}>
+              어떤 특허 주제를 찾고 있나요?
+            </div>
+
+            <div className={styles.searchInputContainer}>
+              <input
+                type="text"
+                placeholder="예시: 4륜, 기계식키보드, 물류로봇, 인공지능, 태양광발전"
+                className={styles.searchInput}
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                onKeyPress={(e) => e.key === "Enter" && handleSearch()}
+              />
+              <button
+                className={styles.searchButton}
+                onClick={handleSearch}
+                disabled={!searchQuery.trim() || isLoading}
+              >
+                {isLoading ? "검색 중..." : "검색"}
+              </button>
+            </div>
+
+            {/* 유사단어 표시 영역 */}
+            {showSimilarWords && similarWords.length > 0 && (
+              <div className={styles.similarWordsContainer}>
+                <div className={styles.similarWordsHeader}>
+                  <span className={styles.similarWordsLabel}>유사 키워드</span>
+                </div>
+                <div className={styles.similarWordsList}>
+                  {similarWords.map((word, index) => (
+                    <span
+                      key={index}
+                      className={styles.similarWordTag}
+                      onClick={() => handleSimilarWordClick(word)}
+                    >
+                      {word}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            <div className={styles.countryCheckboxes}>
+              <label className={styles.checkboxLabel}>
+                <input
+                  type="checkbox"
+                  checked={isDomestic}
+                  onChange={(e) => handleDomesticChange(e.target.checked)}
+                />
+                국내
+              </label>
+              <label className={styles.checkboxLabel}>
+                <input
+                  type="checkbox"
+                  checked={isForeign}
+                  onChange={(e) => handleForeignChange(e.target.checked)}
+                />
+                해외
+              </label>
+            </div>
+
+            {isLoading && (
+              <div className={styles.loadingContainer}>
+                <div className={styles.spinner}></div>
+                <p>AI가 특허를 분석하고 있습니다...</p>
+              </div>
+            )}
           </div>
         </section>
       )}
@@ -251,12 +284,14 @@ export default function MainContent() {
                 {showSimilarWords && similarWords.length > 0 && (
                   <div className={styles.similarWordsContainer}>
                     <div className={styles.similarWordsHeader}>
-                      <span className={styles.similarWordsLabel}>유사 키워드</span>
+                      <span className={styles.similarWordsLabel}>
+                        유사 키워드
+                      </span>
                     </div>
                     <div className={styles.similarWordsList}>
                       {similarWords.map((word, index) => (
-                        <span 
-                          key={index} 
+                        <span
+                          key={index}
                           className={styles.similarWordTag}
                           onClick={() => handleSimilarWordClick(word)}
                         >
@@ -294,6 +329,59 @@ export default function MainContent() {
                 )}
               </div>
             </section>
+            <div className={styles.historyCard}>
+              <div className={styles.historyHeader}>
+                <h4 className={styles.historyTitle}>최근 활동</h4>
+              </div>
+
+              <div>
+                <div className={styles.historySectionTitle}>최근 검색어</div>
+                <div className={styles.recentSearchesList}>
+                  {recentSearches.length === 0 && (
+                    <span className={styles.recentViewedItem}>
+                      최근 검색어가 없습니다.
+                    </span>
+                  )}
+                  {recentSearches.map((q, idx) => (
+                    <span
+                      key={idx}
+                      className={styles.recentSearchTag}
+                      onClick={() => {
+                        setSearchQuery(q);
+                        setTimeout(() => handleSearch(), 50);
+                      }}
+                    >
+                      {q}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              <div>
+                <div className={styles.historySectionTitle}>
+                  최근 열람한 특허
+                </div>
+                <div className={styles.recentViewedList}>
+                  {recentViewedPatents.length === 0 && (
+                    <span className={styles.recentViewedMeta}>
+                      최근 열람한 특허가 없습니다.
+                    </span>
+                  )}
+                  {recentViewedPatents.map((p) => (
+                    <div
+                      key={p.id}
+                      className={styles.recentViewedCard}
+                      onClick={() => handlePatentClick(p)}
+                    >
+                      <div className={styles.recentViewedTitle}>{p.title}</div>
+                      <div className={styles.recentViewedMeta}>
+                        출원번호: {p.applicationNumber}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
           </div>
           <div className={styles.rightColumn}>
             <section className={styles.resultsSectionInline}>
@@ -307,11 +395,14 @@ export default function MainContent() {
                 {searchResults.length > 0 ? (
                   <PatentList
                     patents={searchResults}
+                    onPatentClick={handlePatentClick}
                   />
                 ) : (
                   <div className={styles.noResults}>
                     <p>검색 결과가 없습니다. 다른 키워드로 검색해보세요.</p>
-                    <p>예시: 4륜, 기계식키보드, 물류로봇, 인공지능, 태양광발전</p>
+                    <p>
+                      예시: 4륜, 기계식키보드, 물류로봇, 인공지능, 태양광발전
+                    </p>
                   </div>
                 )}
               </div>

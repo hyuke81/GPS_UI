@@ -25,6 +25,84 @@
   min-width: 0;
 }
 
+/* 최근 검색/열람 */
+.historyCard {
+  margin-top: 16px;
+  background: #ffffff;
+  border-radius: 12px;
+  border: 1px solid #e9ecef;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+  padding: 16px;
+}
+
+.historyHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.historyTitle {
+  font-size: 20px;
+  font-weight: 700;
+  color: #333;
+  margin: 0;
+}
+
+.historySectionTitle {
+  font-size: 16px;
+  font-weight: 600;
+  color: #495057;
+  margin: 10px 0 8px 0;
+}
+
+.recentSearchesList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-left: 8px;
+}
+
+.recentSearchTag {
+  padding: 6px 10px;
+  background: #f1f3f5;
+  border-radius: 14px;
+  font-size: 14px;
+  color: #495057;
+  cursor: pointer;
+}
+
+.recentViewedList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-left: 8px;
+}
+
+.recentViewedCard {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 8px 12px;
+  background: linear-gradient(135deg, #f8f9fa 0%, #edf2f7 100%);
+  border: 1px solid #dee2e6;
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+  cursor: pointer;
+  min-width: 220px;
+}
+
+.recentViewedTitle {
+  font-size: 13px;
+  color: #212529;
+  font-weight: 600;
+}
+
+.recentViewedMeta {
+  font-size: 12px;
+  color: #495057;
+}
+
 /* 상단 검색 섹션 */
 .searchSection {
   flex: 1;

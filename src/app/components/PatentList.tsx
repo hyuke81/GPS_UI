@@ -13,9 +13,10 @@ const similarityOptions = [
 interface PatentListProps {
   patents: PatentData[];
   totalCount?: number;
+  onPatentClick?: (patent: PatentData) => void;
 }
 
-export default function PatentList({ patents }: PatentListProps) {
+export default function PatentList({ patents, onPatentClick }: PatentListProps) {
   const [similaritySetting, setSimilaritySetting] = useState("broad");
   const [sortOption, setSortOption] = useState("none");
   const [filterOption, setFilterOption] = useState("all");
@@ -147,7 +148,11 @@ export default function PatentList({ patents }: PatentListProps) {
       {/* 특허 리스트 */}
       <div className={styles.patentList}>
         {sortedPatents.map((patent) => (
-          <div key={patent.id} className={styles.patentItem}>
+          <div
+            key={patent.id}
+            className={styles.patentItem}
+            onClick={() => onPatentClick && onPatentClick(patent)}
+          >
             <div className={styles.patentContent}>
               <div className={styles.patentHeader}>
                 <h4 className={styles.patentTitle}>{patent.title}</h4>

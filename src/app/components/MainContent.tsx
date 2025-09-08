@@ -124,8 +124,9 @@ export default function MainContent() {
         />
       ))}
 
-      <section className={styles.searchSection}>
-        <div className={styles.searchContainer}>
+      {!showResults && (
+        <section className={styles.searchSection}>
+          <div className={styles.searchContainer}>
           <div className={styles.searchHeader}>
             <Image
               src="/images/mainsearch_icon.png"
@@ -204,30 +205,119 @@ export default function MainContent() {
               <p>AI가 특허를 분석하고 있습니다...</p>
             </div>
           )}
-        </div>
-      </section>
-
-      {showResults ? (
-        <section className={styles.resultsSection}>
-          <div className={styles.resultsContainer}>
-            <div className={styles.resultsHeader}>
-              <h2 className={styles.resultsTitle}>검색 결과</h2>
-              <button onClick={handleReset} className={styles.resetButton}>
-                초기화
-              </button>
-            </div>
-            {searchResults.length > 0 ? (
-              <PatentList
-                patents={searchResults}
-              />
-            ) : (
-              <div className={styles.noResults}>
-                <p>검색 결과가 없습니다. 다른 키워드로 검색해보세요.</p>
-                <p>예시: 4륜, 기계식키보드, 물류로봇, 인공지능, 태양광발전</p>
-              </div>
-            )}
           </div>
         </section>
+      )}
+
+      {showResults ? (
+        <div className={styles.splitContainer}>
+          <div className={styles.leftColumn}>
+            <section className={styles.searchSectionInline}>
+              <div className={styles.searchContainer}>
+                <div className={styles.searchHeader}>
+                  <Image
+                    src="/images/mainsearch_icon.png"
+                    alt="검색 아이콘"
+                    width={24}
+                    height={24}
+                    className={styles.searchIcon}
+                  />
+                  <h1 className={styles.searchTitle}>특허 주제 검색</h1>
+                </div>
+
+                <div className={styles.searchPrompt}>
+                  어떤 특허 주제를 찾고 있나요?
+                </div>
+
+                <div className={styles.searchInputContainer}>
+                  <input
+                    type="text"
+                    placeholder="예시: 4륜, 기계식키보드, 물류로봇, 인공지능, 태양광발전"
+                    className={styles.searchInput}
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    onKeyPress={(e) => e.key === "Enter" && handleSearch()}
+                  />
+                  <button
+                    className={styles.searchButton}
+                    onClick={handleSearch}
+                    disabled={!searchQuery.trim() || isLoading}
+                  >
+                    {isLoading ? "검색 중..." : "검색"}
+                  </button>
+                </div>
+
+                {/* 유사단어 표시 영역 */}
+                {showSimilarWords && similarWords.length > 0 && (
+                  <div className={styles.similarWordsContainer}>
+                    <div className={styles.similarWordsHeader}>
+                      <span className={styles.similarWordsLabel}>유사 키워드</span>
+                    </div>
+                    <div className={styles.similarWordsList}>
+                      {similarWords.map((word, index) => (
+                        <span 
+                          key={index} 
+                          className={styles.similarWordTag}
+                          onClick={() => handleSimilarWordClick(word)}
+                        >
+                          {word}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                <div className={styles.countryCheckboxes}>
+                  <label className={styles.checkboxLabel}>
+                    <input
+                      type="checkbox"
+                      checked={isDomestic}
+                      onChange={(e) => handleDomesticChange(e.target.checked)}
+                    />
+                    국내
+                  </label>
+                  <label className={styles.checkboxLabel}>
+                    <input
+                      type="checkbox"
+                      checked={isForeign}
+                      onChange={(e) => handleForeignChange(e.target.checked)}
+                    />
+                    해외
+                  </label>
+                </div>
+
+                {isLoading && (
+                  <div className={styles.loadingContainer}>
+                    <div className={styles.spinner}></div>
+                    <p>AI가 특허를 분석하고 있습니다...</p>
+                  </div>
+                )}
+              </div>
+            </section>
+          </div>
+          <div className={styles.rightColumn}>
+            <section className={styles.resultsSectionInline}>
+              <div className={styles.resultsContainerFull}>
+                <div className={styles.resultsHeader}>
+                  <h2 className={styles.resultsTitle}>검색 결과</h2>
+                  <button onClick={handleReset} className={styles.resetButton}>
+                    초기화
+                  </button>
+                </div>
+                {searchResults.length > 0 ? (
+                  <PatentList
+                    patents={searchResults}
+                  />
+                ) : (
+                  <div className={styles.noResults}>
+                    <p>검색 결과가 없습니다. 다른 키워드로 검색해보세요.</p>
+                    <p>예시: 4륜, 기계식키보드, 물류로봇, 인공지능, 태양광발전</p>
+                  </div>
+                )}
+              </div>
+            </section>
+          </div>
+        </div>
       ) : (
         <AIFeatures />
       )}

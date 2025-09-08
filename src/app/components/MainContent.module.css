@@ -6,6 +6,25 @@
   margin-top: 40px;
 }
 
+.splitContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 24px;
+  padding: 20px;
+}
+
+.leftColumn {
+  flex: 0 0 520px;
+  max-width: 520px;
+}
+
+.rightColumn {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
 /* 상단 검색 섹션 */
 .searchSection {
   flex: 1;
@@ -15,6 +34,13 @@
   padding: 20px;
   background-color: white;
   margin-bottom: 40px;
+}
+
+.searchSectionInline {
+  display: block;
+  background-color: white;
+  padding: 0;
+  margin: 0;
 }
 
 .searchContainer {
@@ -118,8 +144,12 @@
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 .loadingContainer p {
@@ -133,9 +163,18 @@
   padding: 40px 20px 80px 20px;
 }
 
+.resultsSectionInline {
+  padding: 0 20px 80px 20px;
+}
+
 .resultsContainer {
   max-width: 800px;
   margin: 0 auto;
+}
+
+.resultsContainerFull {
+  max-width: 100%;
+  margin: 0;
 }
 
 .resultsHeader {
@@ -204,7 +243,7 @@
   background: #f7f9fb;
   border-radius: 14px;
   padding: 8px 14px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
 }
 
 .checkboxLabel {
@@ -230,7 +269,7 @@
   cursor: pointer;
   transition: border 0.2s, box-shadow 0.2s;
   position: relative;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
 }
 
 .checkboxLabel input[type="checkbox"]:checked {
@@ -239,7 +278,7 @@
 }
 
 .checkboxLabel input[type="checkbox"]:checked::after {
-  content: '';
+  content: "";
   display: block;
   width: 7px;
   height: 7px;
@@ -317,18 +356,33 @@
 
 /* 반응형 디자인 */
 @media (max-width: 768px) {
+  .splitContainer {
+    flex-direction: column;
+    gap: 16px;
+    padding: 12px;
+  }
+
+  .leftColumn {
+    flex: none;
+    max-width: 100%;
+  }
+
+  .rightColumn {
+    flex: none;
+  }
+
   .searchContainer {
     padding: 25px 20px;
   }
-  
+
   .searchInputContainer {
     flex-direction: column;
   }
-  
+
   .searchButton {
     justify-content: center;
   }
-  
+
   .resultsHeader {
     flex-direction: column;
     gap: 15px;
@@ -339,13 +393,13 @@
     margin: 16px 0;
     padding: 12px 16px;
   }
-  
+
   .similarWordsList {
     gap: 6px;
   }
-  
+
   .similarWordTag {
     padding: 5px 10px;
     font-size: 12px;
   }
-} 
+}

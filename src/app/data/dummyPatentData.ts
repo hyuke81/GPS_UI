@@ -9,6 +9,8 @@ export interface PatentData {
   applicationDate: string;
   similarity: number;
   imageUrl?: string;
+  registrationStatus?: string;
+  stage?: string;
 }
 
 // 유사단어 데이터 구조
@@ -25,6 +27,8 @@ export interface JsonPatentData {
   발명명칭?: string;
   발명명칭_ko?: string;
   유사도?: number;
+  등록상태?: string;
+  단계?: string;
   [key: string]: unknown;
 }
 
@@ -116,5 +120,7 @@ export const convertJsonToPatentData = (data: JsonPatentData[]): PatentData[] =>
     applicationDate: "-", // 데이터에 없는 필드
     similarity: Math.round((item.유사도 || 0) * 100), // 0~1 범위를 0~100으로 변환
     imageUrl: undefined,
+    registrationStatus: item.등록상태 || "-",
+    stage: item.단계 || "-",
   }));
 };

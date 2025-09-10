@@ -16,7 +16,10 @@ interface PatentListProps {
   onPatentClick?: (patent: PatentData) => void;
 }
 
-export default function PatentList({ patents, onPatentClick }: PatentListProps) {
+export default function PatentList({
+  patents,
+  onPatentClick,
+}: PatentListProps) {
   const [similaritySetting, setSimilaritySetting] = useState("broad");
   const [sortOption, setSortOption] = useState("none");
   const [filterOption, setFilterOption] = useState("all");
@@ -165,27 +168,25 @@ export default function PatentList({ patents, onPatentClick }: PatentListProps) 
                 </div>
               </div>
 
-              <p className={styles.patentDescription}>{patent.description}</p>
-
               <div className={styles.patentDetails}>
                 <div className={styles.detailRow}>
                   <span className={styles.detailLabel}>출원번호:</span>
                   <span className={styles.detailValue}>
                     {patent.applicationNumber}
                   </span>
-                  <span className={styles.detailLabel}>특허번호:</span>
+                  <span className={styles.detailLabel}>국가:</span>
                   <span className={styles.detailValue}>
                     {patent.patentNumber}
                   </span>
                 </div>
                 <div className={styles.detailRow}>
-                  <span className={styles.detailLabel}>특허권자:</span>
+                  <span className={styles.detailLabel}>등록 상태:</span>
                   <span className={styles.detailValue}>
-                    {patent.patentHolder}
+                    {patent.registrationStatus || "-"}
                   </span>
-                  <span className={styles.detailLabel}>출원일:</span>
+                  <span className={styles.detailLabel}>단계:</span>
                   <span className={styles.detailValue}>
-                    {patent.applicationDate}
+                    {patent.stage || "-"}
                   </span>
                 </div>
               </div>
